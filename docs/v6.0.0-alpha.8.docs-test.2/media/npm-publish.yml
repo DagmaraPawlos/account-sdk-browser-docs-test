@@ -1,0 +1,43 @@
+name: Publish Package to npmjs
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    build:
+        if: github.repository == 'user-identity/account-sdk-browser'
+        runs-on: [self-hosted, ubuntu-latest-no-docker, developer-foundations]
+        steps:
+            -   uses: actions/checkout@v6
+            -   uses: actions/setup-node@v6
+                with:
+                    node-version-file: ".nvmrc"
+                    cache: "npm"
+            -   name: Install dependencies
+                run: npm ci
+            -   name: Run tests
+                run: |
+                    npx biome ci
+                    npm run docs:build
+                    npm run test
+
+    publish-npm:
+        if: github.repository == 'user-identity/account-sdk-browser'
+        needs: build
+        runs-on: [self-hosted, ubuntu-latest-no-docker, developer-foundations]
+        steps:
+            -   uses: actions/checkout@v6
+            -   name: Setup node
+                uses: actions/setup-node@v6
+                with:
+                    node-version-file: ".nvmrc"
+                    cache: "npm"
+                    registry-url: https://registry.npmjs.org/
+            -   name: Install dependencies
+                run: npm ci
+            -   name: Publish to npm
+                run: npm publish --tag alpha --access=public
+                env:
+                    # Using the org secret provided by Platform engineering.
+                    NODE_AUTH_TOKEN: ${{secrets.AUTO_NPM_TOKEN}}
