@@ -1,5 +1,18 @@
 {
+  "latest": "v6.0.0-alpha.8.docs-test.1",
+  "latestVersion": "v6.0.0-alpha.8.docs-test.1",
   "versions": [
-    "v5.2.7"
+    {
+      "label": "v6.0.0-alpha.8.docs-test.1",
+      "path": "v6.0.0-alpha.8.docs-test.1",
+      "prerelease": true,
+      "version": "v6.0.0-alpha.8.docs-test.1"
+    },
+    {
+      "label": "v5.2.7",
+      "path": "v5.2.7",
+      "prerelease": false,
+      "version": "v5.2.7"
+    }
   ]
 }
