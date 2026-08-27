@@ -14,7 +14,7 @@
         return group;
     }
 
-    fetch(manifestUrl)
+    fetch(manifestUrl, { cache: 'no-store' })
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`Cannot load documentation versions: ${response.status}`);
