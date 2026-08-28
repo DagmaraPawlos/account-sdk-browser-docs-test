@@ -1,0 +1,53 @@
+name: Publish Package to npmjs
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    build:
+        if: github.repository == 'connect/account-sdk-browser'
+        runs-on: [self-hosted, ubuntu-latest-no-docker, developer-foundations]
+        steps:
+            -   uses: actions/checkout@v6
+            -   uses: actions/setup-node@v6
+                with:
+                    node-version-file: ".nvmrc"
+                    cache: "npm"
+            -   name: Install dependencies
+                run: npm ci
+            -   name: Run tests
+                run: |
+                    npx biome ci
+                    npm run docs:build
+                    npm run test
+
+    publish-npm:
+        if: github.repository == 'connect/account-sdk-browser'
+        needs: build
+        runs-on: [self-hosted, ubuntu-latest-no-docker, developer-foundations]
+        steps:
+            -   name: Simulate npm publish without publishing a package
+                env:
+                    RELEASE_TAG: ${{ github.event.release.tag_name }}
+                run: |
+                    if [[ "$RELEASE_TAG" == *".flow-test.1" ]]; then
+                      echo "Simulated npm publishing failure"
+                      exit 1
+                    fi
+
+                    if [[ "$RELEASE_TAG" == *".flow-test.2" || "$RELEASE_TAG" == *".flow-test.3" ]]; then
+                      echo "Simulated npm publishing success"
+                      exit 0
+                    fi
+
+                    echo "Unexpected test release tag: $RELEASE_TAG"
+                    exit 1
+
+    publish-docs:
+        if: github.repository == 'connect/account-sdk-browser'
+        needs: publish-npm
+        uses: ./.github/workflows/github-pages.yml
+        with:
+            ref: ${{ github.event.release.tag_name }}
+        secrets: inherit
