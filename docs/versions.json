@@ -1,7 +1,13 @@
 {
-  "latest": "v6.0.0-alpha.8.flow-test.3",
-  "latestVersion": "v6.0.0-alpha.8.flow-test.3",
+  "latest": "v6.0.0-alpha.10.docs-ref-test.1",
+  "latestVersion": "v6.0.0-alpha.10.docs-ref-test.1",
   "versions": [
+    {
+      "label": "v6.0.0-alpha.10.docs-ref-test.1",
+      "path": "v6.0.0-alpha.10.docs-ref-test.1",
+      "prerelease": true,
+      "version": "v6.0.0-alpha.10.docs-ref-test.1"
+    },
     {
       "label": "v6.0.0-alpha.8.flow-test.3",
       "path": "v6.0.0-alpha.8.flow-test.3",
